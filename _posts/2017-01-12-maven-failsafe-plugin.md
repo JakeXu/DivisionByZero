@@ -1,11 +1,11 @@
+## Maven failsafe plugin 的使用
+
 ```
 ---
 layout: post
 title: Maven failsafe plugin 的使用
 ---
 ```
-
-#Maven failsafe plugin 的使用
 
 Maven failsafe plugin 是一个做整合测试（集成测试、翻译水平有限）的插件；
 
