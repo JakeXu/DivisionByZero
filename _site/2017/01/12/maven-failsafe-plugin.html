@@ -1,0 +1,94 @@
+<p>Maven failsafe plugin 的使用</p>
+
+<p>Maven failsafe plugin 是一个做整合测试（集成测试、翻译水平有限）的插件；</p>
+
+<p>通过使用failsafe 插件+ tomcat插件+ testng，可以达到一种效果：在构建时执行单元测试前可以启动一个tomcat来部署服务，这样单元测试的地址可通，执行测试后关闭服务；</p>
+
+<p>配置如下：</p>
+
+<p>pom.xml 的 build插件</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugins&gt;</span>
+  <span class="c">&lt;!--指定单元测试不执行 否则先执行单元测试 地址不通--&gt;</span>
+  <span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>maven-surefire-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.18<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+      <span class="nt">&lt;skip&gt;</span>true<span class="nt">&lt;/skip&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+  <span class="nt">&lt;/plugin&gt;</span>
+  <span class="c">&lt;!--集成测试的插件配置--&gt;</span>
+  <span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>maven-failsafe-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.19.1<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+      <span class="nt">&lt;suiteXmlFiles&gt;</span>
+        <span class="c">&lt;!--指定配置文件--&gt;</span>
+        <span class="nt">&lt;suiteXmlFile&gt;</span>testng.xml<span class="nt">&lt;/suiteXmlFile&gt;</span>
+      <span class="nt">&lt;/suiteXmlFiles&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;executions&gt;</span>
+      <span class="nt">&lt;execution&gt;</span>
+        <span class="nt">&lt;id&gt;</span>integration-tests<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;goals&gt;</span>
+          <span class="nt">&lt;goal&gt;</span>integration-test<span class="nt">&lt;/goal&gt;</span>
+          <span class="nt">&lt;goal&gt;</span>verify<span class="nt">&lt;/goal&gt;</span>
+        <span class="nt">&lt;/goals&gt;</span>
+      <span class="nt">&lt;/execution&gt;</span>
+    <span class="nt">&lt;/executions&gt;</span>
+  <span class="nt">&lt;/plugin&gt;</span>
+  <span class="c">&lt;!--tomcat插件--&gt;</span>
+  <span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.apache.tomcat.maven<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>tomcat7-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+    <span class="c">&lt;!--部署的端口和配置--&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+      <span class="nt">&lt;port&gt;</span>8080<span class="nt">&lt;/port&gt;</span>
+      <span class="nt">&lt;path&gt;</span>/<span class="nt">&lt;/path&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;executions&gt;</span>
+      <span class="c">&lt;!--什么时候启动 什么时候终止--&gt;</span>
+      <span class="nt">&lt;execution&gt;</span>
+        <span class="nt">&lt;id&gt;</span>tomcat-run<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;goals&gt;</span>
+          <span class="nt">&lt;goal&gt;</span>run-war-only<span class="nt">&lt;/goal&gt;</span>
+        <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;phase&gt;</span>pre-integration-test<span class="nt">&lt;/phase&gt;</span>
+        <span class="nt">&lt;configuration&gt;</span>
+          <span class="nt">&lt;fork&gt;</span>true<span class="nt">&lt;/fork&gt;</span>
+        <span class="nt">&lt;/configuration&gt;</span>
+      <span class="nt">&lt;/execution&gt;</span>
+      <span class="nt">&lt;execution&gt;</span>
+        <span class="nt">&lt;id&gt;</span>tomcat-shutdown<span class="nt">&lt;/id&gt;</span>
+        <span class="nt">&lt;goals&gt;</span>
+          <span class="nt">&lt;goal&gt;</span>shutdown<span class="nt">&lt;/goal&gt;</span>
+        <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;phase&gt;</span>post-integration-test<span class="nt">&lt;/phase&gt;</span>
+      <span class="nt">&lt;/execution&gt;</span>
+    <span class="nt">&lt;/executions&gt;</span>
+  <span class="nt">&lt;/plugin&gt;</span>
+<span class="nt">&lt;/plugins&gt;</span>
+</code></pre>
+</div>
+
+<p>testng.xml</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;suite</span> <span class="na">name=</span><span class="s">"Suite"</span> <span class="na">parallel=</span><span class="s">"true"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!--greeting--&gt;</span>
+    <span class="nt">&lt;test</span> <span class="na">name=</span><span class="s">"duplicatedNewsTest"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;classes&gt;</span>
+            <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">"com.iflytek.ossp.kting.service.greeting.ImageTest"</span><span class="nt">/&gt;</span>
+            <span class="nt">&lt;class</span> <span class="na">name=</span><span class="s">"com.iflytek.ossp.kting.service.greeting.MusicTest"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;/classes&gt;</span>
+    <span class="nt">&lt;/test&gt;</span>
+<span class="nt">&lt;/suite&gt;</span>
+</code></pre>
+</div>
+
+<p>执行后可以在target下面看到执行的结果</p>
+
+<p><img src="result.png" alt="" /></p>
