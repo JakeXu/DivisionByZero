@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: scguo blog
 ---
 <h2>{{ page.title }}</h2>
@@ -8,4 +8,4 @@ title: scguo blog
 {% for post in site.posts %}
   <li>{{ post.date | date_to_string }} <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
 {% endfor %}
-</ul>%
+</ul>
