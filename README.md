@@ -1,2 +1,2 @@
 # scguo blog
-[scguo-blog](https://scguoi.github.io/bolg/)
+[scguo-blog](https://scguoi.github.io/DivisionByZero/)
