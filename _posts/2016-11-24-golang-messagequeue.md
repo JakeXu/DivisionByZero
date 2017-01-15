@@ -1,4 +1,4 @@
-#GO语言消息队列调研
+##GO语言消息队列调研
 
 本文档主要是go mq方案的调研，这里主要调研了go语言版本的nsq和kafka的go语言驱动sarama以及对sarama驱动的扩展wvanbergen。很遗憾的是两种方案都无法支持完全有序。
 
