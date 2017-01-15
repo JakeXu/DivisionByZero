@@ -98,4 +98,4 @@ testng.xml
 
 执行后可以在target下面看到执行的结果
 
-![](result.png)
+![]({{site.url}}/assets/maven-failsafe/result.png)
