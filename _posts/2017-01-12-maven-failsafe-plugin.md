@@ -1,5 +1,9 @@
-Maven failsafe plugin 的使用
-
+```
+---
+layout: post
+title: Maven failsafe plugin 的使用
+---
+```
 Maven failsafe plugin 是一个做整合测试（集成测试、翻译水平有限）的插件；
 
 通过使用failsafe 插件+ tomcat插件+ testng，可以达到一种效果：在构建时执行单元测试前可以启动一个tomcat来部署服务，这样单元测试的地址可通，执行测试后关闭服务；
